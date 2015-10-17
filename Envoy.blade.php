@@ -2,5 +2,6 @@
 
 @task( 'deploy', [ 'on' => 'production', 'confirm' => true ]  )
 	cd /var/www/stalky
-	sudo git pull origin master
+	git pull origin master
+	php artisan migrate
 @endtask
