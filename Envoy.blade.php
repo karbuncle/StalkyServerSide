@@ -3,5 +3,6 @@
 @task( 'deploy', [ 'on' => 'production', 'confirm' => true ]  )
 	cd /var/www/stalky
 	git pull origin master
+	composer update
 	php artisan migrate
 @endtask
