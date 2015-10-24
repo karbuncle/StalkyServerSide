@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    protected $table="users";
+
     public function hasManyComments() {
         return $this->hasMany('App\Comment', 'user_id_to', 'id');
     }
