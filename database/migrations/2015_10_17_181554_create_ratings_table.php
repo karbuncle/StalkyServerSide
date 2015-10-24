@@ -14,12 +14,12 @@ class CreateRatingsTable extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id_from');
-            $table->integer('user_id_to');
-            $table->integer('rating_friendliness');
-            $table->integer('rating_skill');
-            $table->integer('rating_teamwork');
-            $table->integer('rating_funfactor');
+            $table->string('user_id_from');
+            $table->string('user_id_to');
+            $table->tinyInteger('rating_friendliness')->unsigned()->default(0);
+            $table->tinyInteger('rating_skill')->unsigned()->default(0);
+            $table->tinyInteger('rating_teamwork')->unsigned()->default(0);
+            $table->tinyInteger('rating_funfactor')->unsigned()->default(0);
             $table->timestamps();
         });
     }
