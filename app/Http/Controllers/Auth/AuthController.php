@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use GuzzleHttp\Client;
 
 class AuthController extends Controller
 {
@@ -33,6 +35,44 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
+    public function login( Request $request ) {
+    	$client = new Client();
+    	
+    	$userId = $request->input('userId');
+    	$fbToken = $request->input('fbToken');
+    	
+    	$response = $client->request( 'GET', 'https://graph.facebook.com/v2.5/debug_token', [ 
+    		'input_token' => $fbToken ]	
+    	); // TODO: this thing seems to throw exception if the request gives 4xx errors, need confirm
+    	if( isset( $response->data ) ) {
+    		$data = $response->data;
+    		if( $data->app_id == OUR_ID && $data->is_valid && $data->user_id == $userId ) {
+    			// token is valid
+    			if( /* TODO: user does not exist */ false ) {
+    				// TODO register
+    			}
+    			$user = "????";
+    			Auth::login( $user );
+    			
+    		} else {
+    			// token is not valid
+    			// some action should be taken??
+    		}
+    	}
+    	
+    }
+    public function getUserById( $userId ) {
+    	// TODO should return a User object
+    }
+    private function register( $userId ) {
+    	// TODO: adds an entry to database of the given $userId
+    	// should return a User object
+    }
+    
+    public function logout() {
+    	Auth::logout();
+    	return response()->json([], 200);
+    }
     /**
      * Get a validator for an incoming registration request.
      *

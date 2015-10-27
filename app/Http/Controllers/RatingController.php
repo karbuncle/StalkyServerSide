@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Rating;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +16,7 @@ class RatingController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json( Rating::all() );
     }
 
     /**
@@ -82,5 +83,16 @@ class RatingController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    /**
+     * Retrieves the average rating of a user under a certain rating type.
+     * 
+     * @param \App\User $askingForUser
+     * @param \App\Rating\RatingType $ratingType
+     * @return double
+     */
+    public function getAverageRating( $askingFor, $ratingType ) {
+    	 
     }
 }

@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('profile', ['middleware' => 'auth', function() {
+	// Only authenticated users may enter...
+}]);
+
+Route::get( 'login', 'Auth\AuthController@login');
