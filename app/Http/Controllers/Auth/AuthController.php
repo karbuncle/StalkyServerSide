@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 
 class AuthController extends Controller
 {
+	const FB_TOKEN_DEBUG_URI = 'https://graph.facebook.com/v2.5/debug_token';
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -41,19 +42,14 @@ class AuthController extends Controller
     	$userId = $request->input('userId');
     	$fbToken = $request->input('fbToken');
     	
-    	$response = $client->request( 'GET', 'https://graph.facebook.com/v2.5/debug_token', [ 
+    	$response = $client->request( 'GET', self::FB_TOKEN_DEBUG_URI, [ 
     		'input_token' => $fbToken ]	
     	); // TODO: this thing seems to throw exception if the request gives 4xx errors, need confirm
     	if( isset( $response->data ) ) {
     		$data = $response->data;
-    		if( $data->app_id == OUR_ID && $data->is_valid && $data->user_id == $userId ) {
+    		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
     			// token is valid
-    			if( /* TODO: user does not exist */ false ) {
-    				// TODO register
-    			}
-    			$user = "????";
-    			Auth::login( $user );
-    			
+    			Auth::login( User::getUserById( $userId ) );
     		} else {
     			// token is not valid
     			// some action should be taken??

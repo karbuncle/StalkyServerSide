@@ -19,4 +19,4 @@ Route::get('profile', ['middleware' => 'auth', function() {
 	// Only authenticated users may enter...
 }]);
 
-Route::get( 'login', 'Auth\AuthController@login');
+Route::post( 'login', 'Auth\AuthController@login');

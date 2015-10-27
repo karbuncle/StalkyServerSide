@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rating;
+namespace App;
 
 class RatingType extends SplEnum {
 	const __default = self::Unknown;

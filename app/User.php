@@ -20,4 +20,8 @@ class User extends Model
     public function hasManyRatings() {
         return $this->hasMany('App\Rating', 'user_id_to', 'id');
     }
+    public static function getUserById( $userId ) {
+    	return self::firstOrCreate( [ 'facebook_id' => $userId ] );
+    }
+    
 }
