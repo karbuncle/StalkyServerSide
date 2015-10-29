@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Validator;
+use App\FacebookUtil;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use GuzzleHttp\Client;
+use Validator;
 
 class AuthController extends Controller
 {
-	const FB_TOKEN_DEBUG_URI = 'https://graph.facebook.com/v2.5/debug_token';
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -37,27 +36,23 @@ class AuthController extends Controller
     }
 
     public function login( Request $request ) {
-    	$client = new Client();
-    	
     	$userId = $request->input('userId');
     	$userToken = $request->input('userToken');
-    	$appToken = '969518723094878|8t6R4zNy8Bs66LpQaIfWKju-TXo';
-    	
-    	$response = $client->request( 'GET', self::FB_TOKEN_DEBUG_URI, [ 
-    		'input_token'  => $userToken,
-    		'access_token' => $appToken
-    	] ); // TODO: this thing seems to throw exception if the request gives 4xx errors, need confirm
-    	if( isset( $response->data ) ) {
-    		$data = $response->data;
-    		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
-    			// token is valid
-    			Auth::login( User::getUserById( $userId ) );
-    		} else {
-    			// token is not valid
-    			// some action should be taken??
-    		}
+    	if( $userId && $userToken ) {
+    		// both params not null
+	    	$response = FacebookUtil::getInstance()->getDebugToken($userId, $userToken);
+	    	
+	    	if( isset( $response->data ) ) {
+	    		$data = $response->data;
+	    		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
+	    			// token is valid
+	    			Auth::login( User::getUserById( $userId ) );
+	    			return response()->json( [], 200 );
+	    		} else {
+	    			return response()->json( [ 'message' => 'Invalid credentials.' ], 401 );
+	    		}
+	    	}
     	}
-    	
     }
     public function getUserById( $userId ) {
     	// TODO should return a User object
