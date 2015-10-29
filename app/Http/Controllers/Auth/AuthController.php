@@ -38,9 +38,10 @@ class AuthController extends Controller
     public function login( Request $request ) {
     	$userId = $request->input('userId');
     	$userToken = $request->input('userToken');
+        
     	if( $userId && $userToken ) {
     		// both params not null
-	    	$response = FacebookUtil::getInstance()->getDebugToken($userId, $userToken);
+	    	$response = FacebookUtil::getInstance()->getDebugToken( $userToken );
 	    	
 	    	if( isset( $response->data ) ) {
 	    		$data = $response->data;

@@ -20,3 +20,8 @@ Route::get('profile', ['middleware' => 'auth', function() {
 }]);
 
 Route::post( 'login', 'Auth\AuthController@login');
+
+
+Route::resource('users','UserController');
+Route::resource('ratings','RatingController');
+Route::resource('comments','CommentController');

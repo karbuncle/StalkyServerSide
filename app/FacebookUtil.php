@@ -19,10 +19,7 @@ class FacebookUtil {
 		}
 		return self::$instance;
 	}
-	public function getDebugToken( $userId, $userToken ) {
-		
-		$userId = $request->input('userId');
-		$userToken = $request->input('userToken');
+	public function getDebugToken( $userToken ) {
 		$appToken = $this->getAppAccessToken();
 		 
 		return $this->client->request( 'GET', self::GRAPH_API_URI . '/debug_token', [
