@@ -41,7 +41,7 @@ class AuthController extends Controller
     	
     	$userId = $request->input('userId');
     	$userToken = $request->input('userToken');
-    	$appToken = $request->input('appToken');
+    	$appToken = '969518723094878|8t6R4zNy8Bs66LpQaIfWKju-TXo';
     	
     	$response = $client->request( 'GET', self::FB_TOKEN_DEBUG_URI, [ 
     		'input_token'  => $userToken,
