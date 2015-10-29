@@ -40,11 +40,13 @@ class AuthController extends Controller
     	$client = new Client();
     	
     	$userId = $request->input('userId');
-    	$fbToken = $request->input('fbToken');
+    	$userToken = $request->input('userToken');
+    	$appToken = $request->input('appToken');
     	
     	$response = $client->request( 'GET', self::FB_TOKEN_DEBUG_URI, [ 
-    		'input_token' => $fbToken ]	
-    	); // TODO: this thing seems to throw exception if the request gives 4xx errors, need confirm
+    		'input_token'  => $userToken,
+    		'access_token' => $appToken
+    	] ); // TODO: this thing seems to throw exception if the request gives 4xx errors, need confirm
     	if( isset( $response->data ) ) {
     		$data = $response->data;
     		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
