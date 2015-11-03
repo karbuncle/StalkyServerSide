@@ -55,13 +55,6 @@ class AuthController extends Controller
 	    	}
     	}
     }
-    public function getUserById( $userId ) {
-    	// TODO should return a User object
-    }
-    private function register( $userId ) {
-    	// TODO: adds an entry to database of the given $userId
-    	// should return a User object
-    }
     
     public function logout() {
     	Auth::logout();

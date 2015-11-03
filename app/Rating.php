@@ -8,7 +8,9 @@ class Rating extends Model
 {
     
     protected $table = 'ratings';
-    const RATING_COLUMN_PREFICES = 'rating_';
+    const RATING_COLUMN_PREFIX = 'rating_';
+    const RATING_TYPES = [ 'friendliness', 'skill', 'teamwork', 'funfactor' ];
+    const MAX_RATING = 5;
     
     /**
      * Retrieves the average rating of a user under a certain rating type.
@@ -18,7 +20,7 @@ class Rating extends Model
      * @return double
      */
     public static function getAverageRating( $askingFor, $ratingType ) {
-    	$columnOfType = self::RATING_COLUMN_PREFICES . $ratingType;
+    	$columnOfType = self::RATING_COLUMN_PREFIX . $ratingType;
     	self::where( 'user_id_to' , '=' , $askingFor )
     	        ->where( $columnOfType , '<>' , 0 )
     	        ->get()

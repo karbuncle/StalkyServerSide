@@ -9,79 +9,63 @@ use App\Http\Controllers\Controller;
 class RatingController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return response()->json( Rating::all() );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Stores a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function rate(Request $request)
     {
-        //
+        $transaction = Rating::create( [
+        	'user_id_from' => Auth::user()->facebook_id,
+        	'user_id_to'   => $request->input( 'who' )
+        ] );
+        populateTransaction( $transaction, $request );
+        $transaction->save();
+        return $response->json( [ 'code' => 200 ] );
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Updates the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $transaction = Rating::where( [ 
+        	'from' => Auth::user()->facebook_id, 
+        	'to'   => $request->input( 'who' ),
+        ] );
+        populateTransaction( $transaction, $request );
+        $transaction->save();
+        return $response->json( [ 'code' => 200 ] );
+    }
+    
+    private function populateTransaction( Rating $transaction, Request $request ) {
+    	foreach( Rating::RATING_TYPES as $rating_type ) {
+    		$column = Rating::RATING_COLUMN_PREFIX . $rating_type;
+    		$rating = $request->input( $rating_type );
+    		if( $rating >= 0 ) {
+    			$transaction->$column =
+    				$rating > Rating::MAX_RATING ? Rating::MAX_RATING : $rating;
+    		}
+    	}
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Removes the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function clear(Request $request)
     {
-        //
+    	Rating::where( [
+    			'from' => Auth::user()->facebook_id,
+    			'to'   => $request->input( 'who' ),
+    	] )->delete();
+    	return $response->json( [ 'code' => 200 ] );
     }
 
 }

@@ -21,6 +21,7 @@ Route::get('profile', ['middleware' => 'auth', function() {
 
 Route::post( 'login', 'Auth\AuthController@login');
 
+// TODO all except login should use ['middleware' => 'auth', 'uses' => 'XXXController']
 
 Route::resource('users','UserController');
 Route::resource('ratings','RatingController');
