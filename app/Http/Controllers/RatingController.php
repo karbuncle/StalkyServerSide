@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Rating;
 use App\Http\Controllers\Controller;
 
+// TODO messages should be put in a language file in resources/lang/en/
 class RatingController extends Controller
 {
     /**
@@ -22,7 +23,7 @@ class RatingController extends Controller
         ] );
         populateTransaction( $transaction, $request );
         $transaction->save();
-        return $response->json( [ 'code' => 200 ] );
+        return response()->json( [ 'message' => 'User has been rated' ], 200 );
     }
 
     /**
@@ -39,7 +40,7 @@ class RatingController extends Controller
         ] );
         populateTransaction( $transaction, $request );
         $transaction->save();
-        return $response->json( [ 'code' => 200 ] );
+        return response()->json( [ 'message' => 'A rating has been updated' ], 200 );
     }
     
     private function populateTransaction( Rating $transaction, Request $request ) {
@@ -65,7 +66,7 @@ class RatingController extends Controller
     			'from' => Auth::user()->facebook_id,
     			'to'   => $request->input( 'who' ),
     	] )->delete();
-    	return $response->json( [ 'code' => 200 ] );
+    	return response()->json( [ 'message' => 'A rating has been deleted' ], 200 );
     }
 
 }

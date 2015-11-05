@@ -16,10 +16,13 @@ Route::get('/', function () {
 });
 
 Route::get('profile', ['middleware' => 'auth', function() {
-	// Only authenticated users may enter...
+	// TODO this should be removed at some point...
+	// for testing login function only
+	return response()->json( [ 'message' => 'logged in!' ], 200 );
 }]);
 
 Route::post( 'login', 'Auth\AuthController@login');
+Route::post( 'logout', 'Auth\AuthController@logout');
 
 // TODO all except login should use ['middleware' => 'auth', 'uses' => 'XXXController']
 
