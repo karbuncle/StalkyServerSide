@@ -50,7 +50,7 @@ class AuthController extends Controller
 	    			Auth::login( User::getUserById( $userId ) );
 	    			return response()->json( [], 200 );
 	    		} else {
-	    			return response()->json( [ 'message' => 'Invalid credentials.' ], 401 );
+	    			return response()->json( [ 'message' => trans('auth.failed') ], 401 );
 	    		}
 	    	}
     	}
@@ -58,7 +58,7 @@ class AuthController extends Controller
     
     public function logout() {
     	Auth::logout();
-    	return response()->json([], 200);
+    	return response()->json( [ 'message' => trans('auth.logged_out') ], 200);
     }
     /**
      * Get a validator for an incoming registration request.

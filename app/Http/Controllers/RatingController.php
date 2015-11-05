@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Rating;
 use App\Http\Controllers\Controller;
 
-// TODO messages should be put in a language file in resources/lang/en/
 class RatingController extends Controller
 {
     /**
@@ -17,13 +16,14 @@ class RatingController extends Controller
      */
     public function rate(Request $request)
     {
-        $transaction = Rating::create( [
+    	$param = [
         	'user_id_from' => Auth::user()->facebook_id,
         	'user_id_to'   => $request->input( 'who' )
-        ] );
+        ];
+        $transaction = self::create( $param );
         populateTransaction( $transaction, $request );
         $transaction->save();
-        return response()->json( [ 'message' => 'User has been rated' ], 200 );
+        return response()->json( [ 'message' => trans( 'rating.created', $param ) ], 200 );
     }
 
     /**
@@ -34,22 +34,23 @@ class RatingController extends Controller
      */
     public function update(Request $request)
     {
-        $transaction = Rating::where( [ 
-        	'from' => Auth::user()->facebook_id, 
-        	'to'   => $request->input( 'who' ),
-        ] );
+    	$param =  [ 
+        	'user_id_from' => Auth::user()->facebook_id, 
+        	'user_id_to'   => $request->input( 'who' ),
+        ];
+        $transaction = self::where( $param );
         populateTransaction( $transaction, $request );
         $transaction->save();
-        return response()->json( [ 'message' => 'A rating has been updated' ], 200 );
+        return response()->json( [ 'message' => trans( 'rating.updated', $param ) ], 200 );
     }
     
     private function populateTransaction( Rating $transaction, Request $request ) {
-    	foreach( Rating::RATING_TYPES as $rating_type ) {
-    		$column = Rating::RATING_COLUMN_PREFIX . $rating_type;
+    	foreach( self::RATING_TYPES as $rating_type ) {
+    		$column = self::RATING_COLUMN_PREFIX . $rating_type;
     		$rating = $request->input( $rating_type );
     		if( $rating >= 0 ) {
     			$transaction->$column =
-    				$rating > Rating::MAX_RATING ? Rating::MAX_RATING : $rating;
+    				$rating > self::MAX_RATING ? self::MAX_RATING : $rating;
     		}
     	}
     }
@@ -62,11 +63,12 @@ class RatingController extends Controller
      */
     public function clear(Request $request)
     {
-    	Rating::where( [
-    			'from' => Auth::user()->facebook_id,
-    			'to'   => $request->input( 'who' ),
-    	] )->delete();
-    	return response()->json( [ 'message' => 'A rating has been deleted' ], 200 );
+    	$param = [
+    		'user_id_from' => Auth::user()->facebook_id,
+    		'user_id_to'   => $request->input( 'who' ),
+    	];
+    	self::where( $param )->delete();
+    	return response()->json( [ 'message' => trans( 'rating.deleted', $param ) ], 200 );
     }
 
 }
