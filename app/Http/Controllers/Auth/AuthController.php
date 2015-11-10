@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Validator;
+use App\FacebookUtil;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -33,6 +35,31 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
+    public function login( Request $request ) {
+    	$userId = $request->input('userId');
+    	$userToken = $request->input('userToken');
+        
+    	if( $userId && $userToken ) {
+    		// both params not null
+	    	$response = FacebookUtil::getInstance()->getDebugToken( $userToken );
+	    	
+	    	if( isset( $response->data ) ) {
+	    		$data = $response->data;
+	    		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
+	    			// token is valid
+	    			Auth::login( User::getUserById( $userId ) );
+	    			return response()->json( [], 200 );
+	    		} else {
+	    			return response()->json( [ 'message' => trans('auth.failed') ], 401 );
+	    		}
+	    	}
+    	}
+    }
+    
+    public function logout() {
+    	Auth::logout();
+    	return response()->json( [ 'message' => trans('auth.logged_out') ], 200);
+    }
     /**
      * Get a validator for an incoming registration request.
      *

@@ -195,5 +195,13 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
     ],
-
+	
+   /*
+    |--------------------------------------------------------------------------
+    | Facebook ID
+    |--------------------------------------------------------------------------
+    | Our App ID on facebook.
+	*/
+	'facebook_app_id' => '969518723094878',
+	'facebook_app_secret' => 'a31920d7d2f766b35652b96f4fccc7e4',
 ];
