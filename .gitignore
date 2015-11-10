@@ -7,3 +7,4 @@ Homestead.json
 .buildpath
 .project
 .settings
+composer.lock
