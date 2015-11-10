@@ -16,6 +16,14 @@ class UserController extends Controller
     public function index()
     {
         //
+        $users = User::all();
+        $json = array();
+        foreach ($users as $user) {
+            array_push($json, array("name"=>$user->name, "facebook_id"=>$user->facebook_id, "gender"=>$user->gender,
+                "age"=>$user->age, "college"=>$user->college));
+        }
+
+        return response()->json($json);
     }
 
     /**
@@ -37,6 +45,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+
     }
 
     /**
@@ -48,6 +57,10 @@ class UserController extends Controller
     public function show($id)
     {
         //
+        $user = User::find($id);
+
+        return response()->json(array("name"=>$user->name, "facebook_id"=>$user->facebook_id, "gender"=>$user->gender,
+            "age"=>$user->age, "college"=>$user->college));
     }
 
     /**
@@ -82,5 +95,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        if (Student::destroy($id)) {
+            return response()->json(array('status'=>'okay'));
+        }
+
+        return response()->json(array('status'=>'error'));
     }
 }
