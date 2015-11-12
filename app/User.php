@@ -14,12 +14,14 @@ class User extends Model
 {
     protected $table="users";
 
-    public function hasManyComments() {
-        return $this->hasMany('App\Comment', 'user_id_to', 'id');
+    public function hasManyComments( $foreign_key ) {
+        return $this->hasMany('App\Comment', $foreign_key, 'id');
     }
+
     public function hasManyRatings() {
         return $this->hasMany('App\Rating', 'user_id_to', 'id');
     }
+
     public static function getUserById( $userId ) {
     	// TODO should update the database with some info when creating
     	return self::firstOrCreate( [ 'facebook_id' => $userId ] );
