@@ -50,7 +50,7 @@ class AuthController extends Controller
 	    			Auth::login( User::getUserById( $userId ) );
 	    			return response()->json( [], 200 );
 	    		} else {
-	    			return response()->json( [ 'message' => trans('auth.failed') ], 401 );
+	    			return response()->json( [ 'message' => trans('auth.failed') ], 200 );
 	    		}
 	    	}
     	}
