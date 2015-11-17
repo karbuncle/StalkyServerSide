@@ -11,7 +11,7 @@ class FacebookUtil {
 	private static $instance;
 	private $client;
 	private function __construct() {
-		$client = new Client();
+		$this->client = new Client();
 	}
 	public static function getInstance() {
 		if ( is_null( self::$instance ) ) {
