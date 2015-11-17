@@ -20,7 +20,7 @@ class FacebookUtil {
 		return self::$instance;
 	}
 	public function getDebugToken( $userToken ) {
-		return $this->graphRequest( 'GET','debug_token', [
+		return $this->graphRequest( 'debug_token', [
 			'input_token'  => $userToken
 		] );
 	}
@@ -28,10 +28,10 @@ class FacebookUtil {
 		$parameters[ 'access_token' ] = config( 'app.facebook_app_id' ) . '|' . config( 'app.facebook_app_secret' );
 		return $parameters;
 	}
-	public function graphRequest( $method = 'GET', $uri = '', $parameters = [] ) {
-		return $this->client->request( 
+	public function graphRequest( $uri = '', $parameters = [] ) {
+		return $this->client->get( 
 			$method, self::GRAPH_API_URI.'/'.$uri, 
-			$this->pushAppAccessToken($parameters)
+			$this->pushAppAccessToken( $parameters )
 		);
 	}
 }
