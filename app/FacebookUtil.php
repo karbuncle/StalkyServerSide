@@ -30,7 +30,7 @@ class FacebookUtil {
 	}
 	public function graphRequest( $uri = '', $parameters = [] ) {
 		return $this->client->get( 
-			$method, self::GRAPH_API_URI.'/'.$uri, 
+			self::GRAPH_API_URI.'/'.$uri, 
 			$this->pushAppAccessToken( $parameters )
 		);
 	}
