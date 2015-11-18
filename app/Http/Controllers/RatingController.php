@@ -14,11 +14,11 @@ class RatingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function rate(Request $request)
+    public function rate( $user_id_to )
     {
     	$param = [
         	'user_id_from' => Auth::user()->facebook_id,
-        	'user_id_to'   => $request->input( 'who' )
+        	'user_id_to'   => $user_id_to
         ];
         $transaction = Rating::create( $param );
         populateTransaction( $transaction, $request );
@@ -32,11 +32,11 @@ class RatingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update( $user_id_to )
     {
     	$param =  [ 
         	'user_id_from' => Auth::user()->facebook_id, 
-        	'user_id_to'   => $request->input( 'who' ),
+        	'user_id_to'   => $user_id_to,
         ];
         $transaction = Rating::where( $param );
         populateTransaction( $transaction, $request );
@@ -61,11 +61,11 @@ class RatingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function clear(Request $request)
+    public function clear( $user_id_to )
     {
     	$param = [
     		'user_id_from' => Auth::user()->facebook_id,
-    		'user_id_to'   => $request->input( 'who' ),
+    		'user_id_to'   => $user_id_to,
     	];
     	Rating::where( $param )->delete();
     	return response()->json( [ 'message' => trans( 'rating.deleted', $param ) ], 200 );

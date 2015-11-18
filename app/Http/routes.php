@@ -22,11 +22,23 @@ Route::get('profile', ['middleware' => 'auth', function() {
 	return response()->json( [ 'message' => 'logged in!' ], 200 );
 }]);
 
-Route::resource( 'login', 'Auth\AuthController@login');
-Route::resource( 'logout', 'Auth\AuthController@logout');
+Route::get( 'logout', function() {
+	// somehow this doesn't work if put in a controller!
+	Auth::logout();
+	return response()->json( [ 'message' => trans('auth.logged_out') ], 200);
+});
+Route::post( 'login', 'Auth\AuthController@login');
 
-// TODO all except login should use ['middleware' => 'auth', 'uses' => 'XXXController']
+
+// TODO all except login, logout should use ['middleware' => 'auth', 'uses' => 'XXXController']
 
 Route::resource('users','UserController');
-Route::resource('ratings','RatingController');
 Route::resource('comments','CommentController');
+
+
+/*
+ * Rating routes, have to specifiy one by one because not using default controller methods!
+ */
+Route::post( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@rate' ] );
+Route::put( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@update' ] );
+Route::delete( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@clear' ] );
