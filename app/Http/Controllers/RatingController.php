@@ -20,7 +20,7 @@ class RatingController extends Controller
         	'user_id_from' => Auth::user()->facebook_id,
         	'user_id_to'   => $request->input( 'who' )
         ];
-        $transaction = self::create( $param );
+        $transaction = Rating::create( $param );
         populateTransaction( $transaction, $request );
         $transaction->save();
         return response()->json( [ 'message' => trans( 'rating.created', $param ) ], 200 );
@@ -38,19 +38,19 @@ class RatingController extends Controller
         	'user_id_from' => Auth::user()->facebook_id, 
         	'user_id_to'   => $request->input( 'who' ),
         ];
-        $transaction = self::where( $param );
+        $transaction = Rating::where( $param );
         populateTransaction( $transaction, $request );
         $transaction->save();
         return response()->json( [ 'message' => trans( 'rating.updated', $param ) ], 200 );
     }
     
     private function populateTransaction( Rating $transaction, Request $request ) {
-    	foreach( self::RATING_TYPES as $rating_type ) {
-    		$column = self::RATING_COLUMN_PREFIX . $rating_type;
+    	foreach( Rating::RATING_TYPES as $rating_type ) {
+    		$column = Rating::RATING_COLUMN_PREFIX . $rating_type;
     		$rating = $request->input( $rating_type );
     		if( $rating >= 0 ) {
     			$transaction->$column =
-    				$rating > self::MAX_RATING ? self::MAX_RATING : $rating;
+    				$rating > Rating::MAX_RATING ? Rating::MAX_RATING : $rating;
     		}
     	}
     }
@@ -67,7 +67,7 @@ class RatingController extends Controller
     		'user_id_from' => Auth::user()->facebook_id,
     		'user_id_to'   => $request->input( 'who' ),
     	];
-    	self::where( $param )->delete();
+    	Rating::where( $param )->delete();
     	return response()->json( [ 'message' => trans( 'rating.deleted', $param ) ], 200 );
     }
 

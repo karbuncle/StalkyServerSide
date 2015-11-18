@@ -15,14 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('user/{id}', 'UserController@index');
 Route::get('profile', ['middleware' => 'auth', function() {
 	// TODO this should be removed at some point...
 	// for testing login function only
 	return response()->json( [ 'message' => 'logged in!' ], 200 );
 }]);
 
-Route::post( 'login', 'Auth\AuthController@login');
-Route::post( 'logout', 'Auth\AuthController@logout');
+Route::resource( 'login', 'Auth\AuthController@login');
+Route::resource( 'logout', 'Auth\AuthController@logout');
 
 // TODO all except login should use ['middleware' => 'auth', 'uses' => 'XXXController']
 

@@ -8,3 +8,4 @@ Homestead.json
 .project
 .settings
 composer.lock
+public/doc

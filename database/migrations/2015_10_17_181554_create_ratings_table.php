@@ -20,6 +20,8 @@ class CreateRatingsTable extends Migration
             $table->tinyInteger('rating_skill')->unsigned()->default(0);
             $table->tinyInteger('rating_teamwork')->unsigned()->default(0);
             $table->tinyInteger('rating_funfactor')->unsigned()->default(0);
+            $table->foreign('user_id_from')->references('facebook_id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id_to')->references('facebook_id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

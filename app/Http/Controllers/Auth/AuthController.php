@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\User;
 use App\FacebookUtil;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use GuzzleHttp\Exception\RequestException;
 use Validator;
 
 class AuthController extends Controller
@@ -41,18 +43,23 @@ class AuthController extends Controller
         
     	if( $userId && $userToken ) {
     		// both params not null
-	    	$response = FacebookUtil::getInstance()->getDebugToken( $userToken );
-	    	
-	    	if( isset( $response->data ) ) {
-	    		$data = $response->data;
+    		try {
+	    		$response = FacebookUtil::getInstance()->getDebugToken( $userToken );
+    		} catch( RequestException $e ) {
+    			var_dump( $e->getResponse() );
+    			return response()->json( [ 'message' => trans('auth.facebook_request_failed') ], 500 );
+    		}
+	    	if( $response->getStatusCode() == 200 ) {
+	    		$data = json_decode( $response->getBody()->getContents() )->data;
 	    		if( $data->app_id == config( 'app.facebook_app_id' ) && $data->is_valid && $data->user_id == $userId ) {
 	    			// token is valid
 	    			Auth::login( User::getUserById( $userId ) );
-	    			return response()->json( [], 200 );
+	    			return response()->json( [ 'message' => trans('auth.logged_in') ], 200 );
 	    		} else {
 	    			return response()->json( [ 'message' => trans('auth.failed') ], 401 );
 	    		}
 	    	}
+	    	return response()->json( [], 200 );
     	}
     }
     
