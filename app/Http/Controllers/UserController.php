@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
+use App\Rating;
 
 class UserController extends Controller
 {
@@ -39,10 +41,10 @@ class UserController extends Controller
         //
         $user = User::where('facebook_id',$id)->first();
 
-        return response()->json(array("friendliness"=>$user->getAverageRating('facebook_id', 'friendliness'),
-            "skills"=>$user->getAverageRating('facebook_id', 'skills'),
-            "teamwork"=>$user->getAverageRating('facebook_id','teamwork'),
-            "funfactor"=>$user->getAverageRating('facebook_id','funfactor'),
+        return response()->json(array("friendliness"=>Rating::getAverageRating('facebook_id', 'friendliness'),
+            "skills"=>Rating::getAverageRating('facebook_id', 'skill'),
+            "teamwork"=>Rating::getAverageRating('facebook_id','teamwork'),
+            "funfactor"=>Rating::getAverageRating('facebook_id','funfactor'),
             "facebook_id"=>$user->facebook_id,
             "comments"=>$user->hasManyComments(), "name"=>$user->name));
 

@@ -21,7 +21,8 @@ class Rating extends Model
      */
     public static function getAverageRating( $askingFor, $ratingType ) {
     	$columnOfType = self::RATING_COLUMN_PREFIX . $ratingType;
-    	self::where( 'user_id_to' , '=' , $askingFor )
+    	return 1.8;
+            self::where( 'user_id_to' , '=' , $askingFor )
     	        ->where( $columnOfType , '<>' , 0 )
     	        ->get()
     	      ->avg($columnOfType);
