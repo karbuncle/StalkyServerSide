@@ -46,7 +46,7 @@ class UserController extends Controller
             "teamwork"=>Rating::getAverageRating('facebook_id','teamwork'),
             "funfactor"=>Rating::getAverageRating('facebook_id','funfactor'),
             "facebook_id"=>$user->facebook_id,
-            "comments"=>$user->hasManyComments(), "name"=>$user->name));
+            "comments"=>$user->hasManyComments()->first(), "name"=>$user->name));
 
     }
 
