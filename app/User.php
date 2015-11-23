@@ -17,8 +17,8 @@ class User extends Model implements AuthenticatableContract,
     protected $table = 'users';
     protected $fillable = ['facebook_id'];
 
-    public function hasManyComments( $foreign_key ) {
-        return $this->hasMany('App\Comment', $foreign_key, 'id');
+    public function hasManyComments() {
+        return $this->hasMany('App\Comment', 'user_id_to', 'facebook_id');
     }
 
     public function hasManyRatings() {
