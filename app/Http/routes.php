@@ -39,6 +39,5 @@ Route::resource('comments','CommentController');
 /*
  * Rating routes, have to specifiy one by one because not using default controller methods!
  */
-Route::post( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@rate' ] );
-Route::put( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@update' ] );
+Route::post( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@update' ] );
 Route::delete( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@clear' ] );

@@ -14,7 +14,7 @@ class RatingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function rate( $user_id_to )
+    public function rate( Request $request, $user_id_to )
     {
     	$param = [
         	'user_id_from' => Auth::user()->facebook_id,
@@ -32,7 +32,7 @@ class RatingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update( $user_id_to )
+    public function update( Request $request, $user_id_to )
     {
     	$param =  [ 
         	'user_id_from' => Auth::user()->facebook_id, 

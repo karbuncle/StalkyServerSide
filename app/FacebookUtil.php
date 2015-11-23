@@ -33,5 +33,10 @@ class FacebookUtil {
 		$options[ strcasecmp($method, 'GET') == 0 ? 'query' : 'form_params' ] = $this->pushAppAccessToken( $parameters );
 		return $this->client->request( $method, '/'.$uri, $options);
 	}
+	public function rawGraphRequest( $method = 'GET', $uri = '', $parameters = [] ) {
+		$options = array();
+		$options[ strcasecmp($method, 'GET') == 0 ? 'query' : 'form_params' ] = $parameters;
+		return $this->client->request( $method, '/'.$uri, $options );
+	}
 }
 ?>
