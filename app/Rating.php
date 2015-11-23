@@ -26,5 +26,12 @@ class Rating extends Model
     	        ->get()
     	      ->avg($columnOfType);
     }
+    public static function getAllAverageRatings( $askingFor ) {
+        $result = array();
+        foreach( RATING_TYPES as $type ) {
+            $result[ $type ] = getAverageRating( $askingFor, $type );
+        }
+        return $result;
+    }
     
 }
