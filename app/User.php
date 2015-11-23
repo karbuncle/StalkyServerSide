@@ -22,9 +22,16 @@ class User extends Model implements AuthenticatableContract,
     }
 
     public function hasManyRatings() {
-        return $this->hasMany('App\Rating', 'user_id_to', 'id');
+        return $this->hasMany('App\Rating', 'user_id_to', 'facebook_id');
     }
 
+    public function getAverageRatings() {
+    	return Rating::getAllAverageRatings( $this->facebook_id );
+    }
+    
+    public function getComments() {
+    	return $this->hasManyComments()->get();
+    }
     public static function getUserById( $userId ) {
     	return self::firstOrCreate( [ 'facebook_id' => $userId ] );
     }

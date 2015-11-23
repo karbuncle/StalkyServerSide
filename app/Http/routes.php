@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('user/{id}', 'UserController@index');
 Route::get('profile', ['middleware' => 'auth', function() {
 	// TODO this should be removed at some point...
 	// for testing login function only

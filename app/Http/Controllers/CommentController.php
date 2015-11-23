@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\comment;
@@ -56,8 +57,8 @@ class CommentController extends Controller
         //
         $input = $request->all();
         $comment = new Comment;
-        $user_from = User::where('id','=',$input['user_id_from'])->first();
-        $user_to = User::where('id', '=', $input['user_id_to'])->first();
+        $user_from = User::where('facebook_id','=',$input['user_id_from'])->first();
+        $user_to = User::where('facebook_id', '=', $input['user_id_to'])->first();
 //        $comment->user_id_from=$input['user_id_from'];
 //        $comment->user_id_to= $input['user_id_to'];
         $comment->comment = $input['comment'];

@@ -41,12 +41,12 @@ class UserController extends Controller
         //
         $user = User::where('facebook_id',$id)->first();
 
-        return response()->json(array("friendliness"=>Rating::getAverageRating('facebook_id', 'friendliness'),
-            "skills"=>Rating::getAverageRating('facebook_id', 'skill'),
-            "teamwork"=>Rating::getAverageRating('facebook_id','teamwork'),
-            "funfactor"=>Rating::getAverageRating('facebook_id','funfactor'),
-            "facebook_id"=>$user->facebook_id,
-            "comments"=>array( $user->hasManyComments()->first() ), "name"=>$user->name));
+        return response()->json( array(
+        	'facebook_id' => $user->facebook_id,
+        	'ratings' => $user->getAverageRatings(),
+            'comments' => $user->getComments(), 
+        	"name"=> $user->name)
+        );
 
     }
 

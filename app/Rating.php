@@ -9,9 +9,17 @@ class Rating extends Model
     
     protected $table = 'ratings';
     const RATING_COLUMN_PREFIX = 'rating_';
-    //const RATING_TYPES = [ 'friendliness', 'skill', 'teamwork', 'funfactor' ];
+    public static $RATING_TYPES = [ 'friendliness', 'skill', 'teamwork', 'funfactor' ];
     const MAX_RATING = 5;
     
+    
+    public function rated() {
+    	return $this->belongsTo( 'App\User', 'user_id_to', 'facebook_id' );
+    }
+    
+    public function rater() {
+    	return $this->belongsTo( 'App\User', 'user_id_from', 'facebook_id' );
+    }
     /**
      * Retrieves the average rating of a user under a certain rating type.
      *
@@ -21,15 +29,14 @@ class Rating extends Model
      */
     public static function getAverageRating( $askingFor, $ratingType ) {
     	$columnOfType = self::RATING_COLUMN_PREFIX . $ratingType;
-    	return self::where( 'user_id_to' , '=' , $askingFor )
-    	        ->where( $columnOfType , '<>' , 0 )
-    	        ->avg($columnOfType)
-    	        ->get()->first();
+    	return User::where( 'facebook_id', '=', $askingFor )->first()
+    	         ->hasManyRatings()
+    			 ->avg( $columnOfType );
     }
     public static function getAllAverageRatings( $askingFor ) {
         $result = array();
-        foreach( [ 'friendliness', 'skill', 'teamwork', 'funfactor' ] as $type ) {
-            $result[ $type ] = getAverageRating( $askingFor, $type );
+        foreach( self::$RATING_TYPES as $type ) {
+            $result[ $type ] = floatval( self::getAverageRating( $askingFor, $type ) );
         }
         return $result;
     }
