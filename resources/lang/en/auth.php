@@ -16,6 +16,8 @@ return [
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 	'not_logged_in' => 'User is not logged in.',
-	'logged_out' => 'User has been logged out.'
+	'logged_out' => 'User has been logged out.',
+	'logged_in' => 'User has successfully logged in.',
+	'facebook_request_failed' => 'Facebook has rejected the verification request. Please try again later.'
 
 ];

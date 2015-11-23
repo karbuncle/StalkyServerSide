@@ -21,9 +21,10 @@ class UserController extends Controller
         $json = array();
         foreach ($users as $user) {
             array_push($json, array("name"=>$user->name, "ratings"=>$user->hasManyRatings()));
+
         }
 
-        return response()->json($json);
+        return response()->json( $json );
     }
 
 
@@ -41,6 +42,7 @@ class UserController extends Controller
         return response()->json(array("friendliness"=>$user->friendliness, "skills"=>$user->skills,
             "teamwork"=>$user->teamwork,"funfactor"=>$user->funfactor, "facebookid"=>$user->facebookid,
             "comments"=>$user->comments, "name"=>$user->name, "age"=>$user->age));
+
     }
 
     /**
