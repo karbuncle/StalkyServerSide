@@ -37,11 +37,11 @@ class UserController extends Controller
     public function show($id)
     {
         //
-        $user = User::find($id);
+        $user = User::where('facebook_id',$id)->first();
 
         return response()->json(array("friendliness"=>$user->friendliness, "skills"=>$user->skills,
-            "teamwork"=>$user->teamwork,"funfactor"=>$user->funfactor, "facebookid"=>$user->facebookid,
-            "comments"=>$user->comments, "name"=>$user->name, "age"=>$user->age));
+            "teamwork"=>$user->teamwork,"funfactor"=>$user->funfactor, "facebook_id"=>$user->facebook_id,
+            "comments"=>$user->hasManyComments(), "name"=>$user->name));
 
     }
 
