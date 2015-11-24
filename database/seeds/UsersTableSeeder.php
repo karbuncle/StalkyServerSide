@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     	$params = [
     			'limit' => 50,
     			// thats my freaking token, dont know when it will expire though.
-    			'access_token' => 'CAANxxasX2V4BAKHo1z2BhghfILZBgiB7tkcyYsH9hug0nNZBZCZAm0nQ7mvB5So0otq10BbvJnCP4NKxIasNimPRo1ixjzTy0i3D1q04zLelbVn0TkL01uqH5opcZBQvqqAmTAkjgf00tG6LFjM2SBsOjN1WuqXbZAMfO5ZAqj9DQVnKbWy4fCDhu7bRwYf7KtmlcZBZC3oLRLHlQnKC6Mqhg'
+    			'access_token' => 'CAANxxasX2V4BAL0sFmBtGaw3QDFzeXrJEsxss2r6mX2oO41Q6nUtpED6VQyZBMEZC8JfRHXGVdZAmCdZADavisXXQ9w5Ajy4rAZBvZAyF6FoyBf8xqGBRIPUpnQOX1CgDGbIU3bFzxd2rlGM9cfqUP5wgOdtXZCZAi0inAgjZC8ZBR0kJ0FVnOPzgMNsPTtytenl85ZCTVIsV0ZCktuI3NjNrtnG'
     	];
     	$response = FacebookUtil::getInstance()->rawGraphRequest( 'GET', '331733603546959/members', $params );
     	$members = json_decode( $response->getBody()->getContents() );
