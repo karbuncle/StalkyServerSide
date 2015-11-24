@@ -22,6 +22,10 @@ class RatingController extends Controller
         	'user_id_from' => Auth::user()->facebook_id, 
         	'user_id_to'   => $user_id_to,
         ];
+    	
+    	if( $param[ 'user_id_from' ] == $param[ 'user_id_to' ] ) {
+    		 return response()->json( [ 'message' => trans( 'rating.unratable' ) ], 403 );
+    	}
         $transaction = Rating::where( $param )->first() or $transaction = Rating::create();
         self::populateTransaction( $transaction, $request );
         
