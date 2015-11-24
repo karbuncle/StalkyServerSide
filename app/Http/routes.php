@@ -34,9 +34,15 @@ Route::post( 'login', 'Auth\AuthController@login');
 Route::resource('users','UserController');
 Route::resource('comments','CommentController');
 
+/*
+ * User route, have to specify one by one because not using default controller methods!
+ */
+Route::get( 'user/{id}', [
+    'as' => 'id', 'uses' => 'UserController@search'
+]);
 
 /*
- * Rating routes, have to specifiy one by one because not using default controller methods!
+ * Rating routes, have to specify one by one because not using default controller methods!
  */
 Route::post( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@update' ] );
 Route::delete( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@clear' ] );

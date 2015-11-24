@@ -14,12 +14,13 @@ class UserController extends Controller
      * Given: a list of ids that were searched
      * Want: return all users with matching characters
      *
+     * @param String $id
      * @return \Illuminate\Http\Response
      */
-    public function search()
+    public function search($id)
     {
         //
-        $users = User::all();
+        $users = User::string($id)->get();
         $json = array();
         foreach ($users as $user) {
             array_push($json, array("name"=>$user->name, "ratings"=>$user->hasManyRatings()));
