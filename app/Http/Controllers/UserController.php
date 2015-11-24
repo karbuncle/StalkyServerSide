@@ -20,12 +20,14 @@ class UserController extends Controller
     public function search($id)
     {
         //
-        $users = DB::table('users')
-            ->where('name', 'like', "%{$id}%")
-            ->get();
+        $users = User::where('name', 'like', "%{$id}%")->get();
         $json = array();
         foreach ($users as $user) {
-            array_push($json, array("name"=>$user->name, "ratings"=>$user->hasManyRatings()));
+            $json[] = array(
+                'name' => $user->name,
+                'ratings' => $user->getAverageRatings(),
+                'facebook_id' => $user->facebook_id
+            );
 
         }
 
