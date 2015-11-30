@@ -24,13 +24,12 @@ class CommentController extends Controller
             $user_from = $comment->userFrom()->first();
             $user_to = $comment->userTo()->first();
 
-            $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name,
-                'gender'=>$user_from->gender, 'age'=>$user_from->age);
-            $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name,
-                'gender'=>$user_to->gender, 'age'=>$user_to->age);
+            $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
+            $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
 
             array_push($json, array("comment"=>$comment->comment,
-                'userFrom'=>$user_from_json, 'userTo'=>$user_to_json));
+                'userFrom'=>$user_from_json, 'userTo'=>$user_to_json,
+                "created_at"=>$comment->created_at, "updated_at"=>$comment->updated_at));
         }
 
         return response()->json($json);
@@ -92,10 +91,8 @@ class CommentController extends Controller
         $user_from = $comment->userFrom()->first();
         $user_to = $comment->userTo()->first();
 
-        $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name,
-            'gender'=>$user_from->gender, 'age'=>$user_from->age);
-        $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name,
-            'gender'=>$user_to->gender, 'age'=>$user_to->age);
+        $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
+        $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
 
         array_push($json,array("comment"=>$comment->comment,
             'userFrom'=>$user_from_json, 'userTo'=>$user_to_json));
