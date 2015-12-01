@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get( 'users/top/{limit?}', [ 'uses' => 'UserController@top' ] );
 Route::get('profile', ['middleware' => 'auth', function() {
 	// TODO this should be removed at some point...
 	// for testing login function only
@@ -31,7 +32,7 @@ Route::post( 'login', 'Auth\AuthController@login');
 
 // TODO all except login, logout should use ['middleware' => 'auth', 'uses' => 'XXXController']
 
-Route::resource('users','UserController');
+//Route::resource('users','UserController');
 Route::resource('comments','CommentController');
 
 Route::get( 'comment', [ 'uses' => 'CommentController@showOne' ] );
@@ -50,4 +51,3 @@ Route::get( 'user/{id}', [
 Route::delete( 'rate/{who}', [ /* 'middleware' => 'auth',*/ 'uses' => 'RatingController@clear' ] );
 Route::get( 'rate', [ 'uses' => 'RatingController@show' ] );
 Route::post( 'rate', [ 'uses' => 'RatingController@update' ] );
-Route::get( 'users/top/{$limit}', [ 'uses' => 'UserController@top' ] );
