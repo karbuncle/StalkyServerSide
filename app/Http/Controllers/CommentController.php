@@ -86,21 +86,32 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+//    public function show($id)
+//    {
+//        //
+//        $comment = Comment::find($id);
+//        $user_from = $comment->userFrom()->first();
+//        $user_to = $comment->userTo()->first();
+//
+//        $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
+//        $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
+//
+//        array_push($json,array("comment"=>$comment->comment,
+//            'userFrom'=>$user_from_json, 'userTo'=>$user_to_json));
+//
+//        return response()->json($json);
+//    }
+    public function show(Request $request)
     {
         //
-        $comment = Comment::find($id);
-        $user_from = $comment->userFrom()->first();
-        $user_to = $comment->userTo()->first();
-
-        $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
-        $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
-
-        array_push($json,array("comment"=>$comment->comment,
-            'userFrom'=>$user_from_json, 'userTo'=>$user_to_json));
-
-        return response()->json($json);
+        $result = Comment::where( [
+            'user_id_from' => $request->input( 'user_id_from' ),
+            'user_id_to' => $request->input( 'user_id_to' )
+        ] )->first() or $result = new Comment;
+        return response()->json( $result );
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
