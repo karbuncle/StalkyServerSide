@@ -109,6 +109,8 @@ class CommentController extends Controller
             'user_id_from' => $request->input( 'user_id_from' ),
             'user_id_to' => $request->input( 'user_id_to' )
         ] )->first() or $result = array(
+            'user_id_from' => $request->input( 'user_id_from' ),
+            'user_id_to' => $request->input( 'user_id_to' ),
             'comment' => ''
         );
         return response()->json( $result );
