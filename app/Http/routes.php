@@ -34,6 +34,8 @@ Route::post( 'login', 'Auth\AuthController@login');
 Route::resource('users','UserController');
 Route::resource('comments','CommentController');
 
+Route::get( 'comment', [ 'uses' => 'CommentController@showOne' ] );
+
 /*
  * User route, have to specify one by one because not using default controller methods!
  */
