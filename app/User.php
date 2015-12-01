@@ -38,8 +38,9 @@ class User extends Model implements AuthenticatableContract,
     }
     public static function firstOrCreate( array $attributes ) {
 		$user = parent::firstOrCreate( $attributes );
-		// TODO should update the database with some info when creating
-		if( !$user->name ) {
+		// should update the database with some info when creating
+		// if( !$user->name ) {
+		// always updates the name,
 			try {
 	    		$response = FacebookUtil::getInstance()->graphRequest( 'GET', $attributes[ 'facebook_id' ] );
 	    		if( $response->getStatusCode() == 200 ) {
@@ -49,7 +50,7 @@ class User extends Model implements AuthenticatableContract,
     		} catch( RequestException $e ) {
     			return response()->json( [ 'message' => trans('auth.facebook_request_failed') ], 500 );
     		}
-		}
+		// }
 		return $user;
     }
     
