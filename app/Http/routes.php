@@ -44,5 +44,6 @@ Route::get( 'user/{id}', [
 /*
  * Rating routes, have to specify one by one because not using default controller methods!
  */
-Route::post( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@update' ] );
-Route::delete( 'rate/{who}', [ 'middleware' => 'auth', 'uses' => 'RatingController@clear' ] );
+// Route::post( 'rate/{who}', [ /* 'middleware' => 'auth', */ 'uses' => 'RatingController@update' ] );
+Route::delete( 'rate/{who}', [ /* 'middleware' => 'auth',*/ 'uses' => 'RatingController@clear' ] );
+Route::post( 'rate', [ /* 'middleware' => 'auth', */ 'uses' => 'RatingController@update' ] );
