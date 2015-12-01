@@ -102,6 +102,18 @@ class CommentController extends Controller
         return response()->json($json);
     }
 
+    public function showOne(Request $request)
+    {
+        //
+        $result = Comment::where( [
+            'user_id_from' => $request->input( 'user_id_from' ),
+            'user_id_to' => $request->input( 'user_id_to' )
+        ] )->first() or $result = new Comment;
+        return response()->json( $result );
+    }
+
+
+
     /**
      * Show the form for editing the specified resource.
      *
