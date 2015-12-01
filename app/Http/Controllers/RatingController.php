@@ -98,7 +98,14 @@ class RatingController extends Controller
 		$result = Rating::where( [
 			'user_id_from' => $request->input( 'user_id_from' ),
 			'user_id_to' => $request->input( 'user_id_to' )	
-		] )->first() or $result = new Rating;
+		] )->first();
+		
+		if( !$result ) {
+			$result = array();
+			foreach( Rating::$RATING_TYPES as $type ) {
+				$result[ Rating::RATING_COLUMN_PREFIX . $type ] = 0;
+			}
+		}
 		return response()->json( $result );
 	} 
 }
