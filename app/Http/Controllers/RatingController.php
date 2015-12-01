@@ -93,5 +93,12 @@ class RatingController extends Controller
     	Rating::where( $param )->delete();
     	return response()->json( [ 'message' => trans( 'rating.deleted', $param ) ], 200 );
     }
-
+	
+	public function show( Request $request ) {
+		$result = Rating::where( [
+			'user_id_from' => $request->input( 'user_id_from' ),
+			'user_id_to' => $request->input( 'user_id_to' )	
+		] )->first() or $result = new Rating;
+		return response()->json( $result );
+	} 
 }

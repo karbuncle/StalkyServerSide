@@ -8,6 +8,7 @@ class Rating extends Model
 {
     
     protected $table = 'ratings';
+    protected $hidden = [ 'id', 'updated_at', 'user_id_from', 'user_id_to', 'created_at' ];
     const RATING_COLUMN_PREFIX = 'rating_';
     public static $RATING_TYPES = [ 'friendliness', 'skill', 'teamwork', 'funfactor' ];
     const MAX_RATING = 5;
