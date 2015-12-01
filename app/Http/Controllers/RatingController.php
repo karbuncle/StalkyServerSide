@@ -29,12 +29,12 @@ class RatingController extends Controller
     	if( $param[ 'user_id_from' ] == $param[ 'user_id_to' ] ) {
     		 return response()->json( [ 'message' => trans( 'rating.unratable' ) ], 403 );
     	}
-        $transaction = Rating::where( $param )->first() or $transaction = Rating::create();
+        $transaction = Rating::where( $param )->first() or $transaction = new Rating;
         self::populateTransaction( $transaction, $request );
         
         if( 
             $transaction->rated()->associate( $user_id_to ) &&
-            $transaction->rater()->associate( Auth::user()->facebook_id ) &&
+            $transaction->rater()->associate( $user_id_from ) &&
             $transaction->save()
         ) {
         	return response()->json( [ 'message' => trans( 'rating.updated', $param ) ], 200 );

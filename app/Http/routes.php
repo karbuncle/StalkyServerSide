@@ -46,4 +46,4 @@ Route::get( 'user/{id}', [
  */
 // Route::post( 'rate/{who}', [ /* 'middleware' => 'auth', */ 'uses' => 'RatingController@update' ] );
 Route::delete( 'rate/{who}', [ /* 'middleware' => 'auth',*/ 'uses' => 'RatingController@clear' ] );
-Route::post( 'rate', [ /* 'middleware' => 'auth', */ 'uses' => 'RatingController@update' ] );
+Route::post( 'rate', [ 'uses' => 'RatingController@update' ] );
