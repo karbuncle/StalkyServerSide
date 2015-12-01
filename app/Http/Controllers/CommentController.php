@@ -56,14 +56,14 @@ class CommentController extends Controller
         //
         $input = $request->all();
         $comment = Comment::where('user_id_from', '=', $input['user_id_from'])
-            ->where('user_id_from', '=', $input['user_id_to'])->first();
+            ->where('user_id_to', '=', $input['user_id_to'])->first();
 
         if ($comment == null) {
             $comment = new Comment;
 
             $user_from = User::where('facebook_id', '=', $input['user_id_from'])->first();
             $user_to = User::where('facebook_id', '=', $input['user_id_to'])->first();
-            
+
             if (!($comment->userTo()->associate($user_to))) {
                 return response()->json(array('status' => 'error'));
             }
