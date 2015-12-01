@@ -55,22 +55,24 @@ class CommentController extends Controller
     {
         //
         $input = $request->all();
-        $comment = new Comment;
-        $user_from = User::where('facebook_id','=',$input['user_id_from'])->first();
-        $user_to = User::where('facebook_id', '=', $input['user_id_to'])->first();
-//        $comment->user_id_from=$input['user_id_from'];
-//        $comment->user_id_to= $input['user_id_to'];
+        $comment = Comment::where('user_id_from', '=', $input['user_id_from'])
+            ->where('user_id_from', '=', $input['user_id_to'])->first();
+
+        if ($comment == null) {
+            $comment = new Comment;
+
+            $user_from = User::where('facebook_id', '=', $input['user_id_from'])->first();
+            $user_to = User::where('facebook_id', '=', $input['user_id_to'])->first();
+            
+            if (!($comment->userTo()->associate($user_to))) {
+                return response()->json(array('status' => 'error'));
+            }
+            if (!($comment->userFrom()->associate($user_from))) {
+                return response()->json(array('status' => 'error'));
+            }
+        }
+
         $comment->comment = $input['comment'];
-//        if(!($comment->userFrom()->hasManyComments('user_id_from'))
-//            && !($comment->userTo()->hasManyComments('user_id_to'))){
-//            return response()->json(array('status'=>'error'));
-//        }
-        if(!($comment->userTo()->associate($user_to)) ){
-            return response()->json(array('status'=>'error'));
-        }
-        if(!($comment->userFrom()->associate($user_from)) ){
-            return response()->json(array('status'=>'error'));
-        }
         if($comment->save()){
             return response()->json(array('status'=>'ok'));
         }
