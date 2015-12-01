@@ -17,22 +17,25 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        /*
         $comments = Comment::all();
         $json = array();
         foreach($comments as $comment){
             $user_from = $comment->userFrom()->first();
             $user_to = $comment->userTo()->first();
 
-            $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
-            $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
+            $user_from_json = array('id'=>$user_from->facebook_id, 'name'=>$user_from->name);
+            $user_to_json = array('id'=>$user_to->facebook_id, 'name'=>$user_to->name);
 
-            array_push($json, array("comment"=>$comment->comment,
-                'userFrom'=>$user_from_json, 'userTo'=>$user_to_json,
-                "created_at"=>$comment->created_at, "updated_at"=>$comment->updated_at));
-        }
+            $json[] = array(
+            	'comment' => $comment->comment,
+                'userFrom' => $user_from_json, 'userTo'=>$user_to_json,
+                'created_at' => $comment->created_at, 'updated_at' => $comment->updated_at
+            );
+        }*/
+        // Note: serialization will take care of it.
 
-        return response()->json($json);
+        return response()->json( Comment::all() );
     }
 
     /**
@@ -89,17 +92,19 @@ class CommentController extends Controller
     public function show($id)
     {
         //
-        $comment = Comment::find($id);
+        /*$comment = Comment::find($id);
         $user_from = $comment->userFrom()->first();
         $user_to = $comment->userTo()->first();
 
         $user_from_json = array('id'=>$user_from->id, 'name'=>$user_from->name);
         $user_to_json = array('id'=>$user_to->id, 'name'=>$user_to->name);
 
-        array_push($json,array("comment"=>$comment->comment,
-            'userFrom'=>$user_from_json, 'userTo'=>$user_to_json));
+        $json[] = array(
+        	'comment' => $comment->comment,
+            'userFrom' => $user_from_json, 'userTo'=>$user_to_json
+        );*/
 
-        return response()->json($json);
+        return response()->json( Comment::find($id) );
     }
 
     public function showOne(Request $request)
@@ -111,6 +116,8 @@ class CommentController extends Controller
         ] )->first() or $result = array(
             'user_id_from' => $request->input( 'user_id_from' ),
             'user_id_to' => $request->input( 'user_id_to' ),
+            'commenter' => '',
+            'commented' => '',
             'comment' => ''
         );
         return response()->json( $result );
