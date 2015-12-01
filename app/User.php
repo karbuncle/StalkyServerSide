@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 //use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use App\FacebookUtil;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract
@@ -36,9 +37,20 @@ class User extends Model implements AuthenticatableContract,
     	return self::firstOrCreate( [ 'facebook_id' => $userId ] );
     }
     public static function firstOrCreate( array $attributes ) {
-		$return_val = parent::firstOrCreate( $attributes );
+		$user = parent::firstOrCreate( $attributes );
 		// TODO should update the database with some info when creating
-		return $return_val;
+		if( !$user->name ) {
+			try {
+	    		$response = FacebookUtil::getInstance()->graphRequest( 'GET', $attributes[ 'facebook_id' ] );
+	    		if( $response->getStatusCode() == 200 ) {
+	    			$user->name = json_decode( $response->getBody()->getContents() )->name;
+	    			$user->save();
+	    		}
+    		} catch( RequestException $e ) {
+    			return response()->json( [ 'message' => trans('auth.facebook_request_failed') ], 500 );
+    		}
+		}
+		return $user;
     }
     
 }

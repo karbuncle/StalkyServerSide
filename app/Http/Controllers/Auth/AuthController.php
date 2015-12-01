@@ -46,7 +46,7 @@ class AuthController extends Controller
     		try {
 	    		$response = FacebookUtil::getInstance()->getDebugToken( $userToken );
     		} catch( RequestException $e ) {
-    			var_dump( $e->getResponse() );
+    			//var_dump( $e->getResponse() );
     			return response()->json( [ 'message' => trans('auth.facebook_request_failed') ], 500 );
     		}
 	    	if( $response->getStatusCode() == 200 ) {
