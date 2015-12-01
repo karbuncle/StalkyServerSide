@@ -108,7 +108,9 @@ class CommentController extends Controller
         $result = Comment::where( [
             'user_id_from' => $request->input( 'user_id_from' ),
             'user_id_to' => $request->input( 'user_id_to' )
-        ] )->first() or $result = new Comment;
+        ] )->first() or $result = array(
+            'comment' => ''
+        );
         return response()->json( $result );
     }
 
