@@ -79,13 +79,18 @@ class UserController extends Controller
         //
     }
     
-    public function top( $limit = 5 ) {
-    	$selector = '0';
-    	foreach( RATING::$RATING_TYPES as $type ) {
-    		$selector .= sprintf( '+ sum( `%s` )', RATING::RATING_COLUMN_PREFIX . $type );
-    	}
-    	$selector = sprintf( '(%s)/%s/%s as avg', $selector, 'count(*)', count( RATING::$RATING_TYPES ) );
-    	//die( $selector );
+    public function top( $type, $limit = 5 ) {
+    	if( !in_array( $type, RATING::$RATING_TYPES ) ) {
+    		// no type specified, fetches overall average
+    		$selector = 0;
+    		foreach( RATING::$RATING_TYPES as $type ) {
+    			$selector .= sprintf( '+ sum( `%s` )', RATING::RATING_COLUMN_PREFIX . $type );
+    		}
+    		$selector = sprintf( '(%s)/%s/%s as avg', $selector, 'count(*)', count( RATING::$RATING_TYPES ) );
+		} else {
+			// fetchs only average of that rating type 
+			$selector = sprintf( 'sum( %s ) / count( * ) as avg', RATING::RATING_COLUMN_PREFIX . $type );
+		}
     	$results = User::join( 'ratings', 'ratings.user_id_to', '=', 'users.facebook_id' )
     		->select( 'facebook_id', 'name', DB::raw( $selector ) )
     		->groupBy( 'facebook_id' )

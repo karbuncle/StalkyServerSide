@@ -15,7 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get( 'top/{limit?}', [ 'uses' => 'UserController@top' ] );
+Route::get( 'top/{type}/{limit?}', [ 'uses' => 'UserController@top' ] )
+	->where('limit', '[0-9]+');
 Route::get('profile', ['middleware' => 'auth', function() {
 	// TODO this should be removed at some point...
 	// for testing login function only
