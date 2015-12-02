@@ -79,22 +79,26 @@ class UserController extends Controller
         //
     }
     
-    public function top( $type, $limit = 5 ) {
-    	if( !in_array( $type, RATING::$RATING_TYPES ) ) {
+    public function top( $sort_type, $limit = 5 ) {
+    	$selectors = array( 'facebook_id', 'name' );
     		// no type specified, fetches overall average
-    		$selector = 0;
+    		$selector = '0';
     		foreach( RATING::$RATING_TYPES as $type ) {
-    			$selector .= sprintf( '+ sum( `%s` )', RATING::RATING_COLUMN_PREFIX . $type );
+    			$query = sprintf( 'sum( %s ) / count( * )', 
+    				RATING::RATING_COLUMN_PREFIX . $type 
+    			);
+    			$selector .= '+ ' . $query;
+    			$selectors[] = DB::raw( $query . 'as ' . $type );
+    			
     		}
-    		$selector = sprintf( '(%s)/%s/%s as avg', $selector, 'count(*)', count( RATING::$RATING_TYPES ) );
-		} else {
-			// fetchs only average of that rating type 
-			$selector = sprintf( 'sum( %s ) / count( * ) as avg', RATING::RATING_COLUMN_PREFIX . $type );
-		}
+    		$selectors[] = DB::raw( 
+    			sprintf( '(%s)/%d as avg', $selector, count( RATING::$RATING_TYPES ) )
+    		);
+    		
     	$results = User::join( 'ratings', 'ratings.user_id_to', '=', 'users.facebook_id' )
-    		->select( 'facebook_id', 'name', DB::raw( $selector ) )
+    		->select( $selectors )
     		->groupBy( 'facebook_id' )
-    		->orderBy( 'avg', 'desc' )
+    		->orderBy( in_array($sort_type, RATING::$RATING_TYPES) ? $sort_type : 'avg' , 'desc' )
     		->take( $limit )
     		->get();
     	return response()->json( $results );
